@@ -45,7 +45,7 @@ User = namedtuple("User", ["username", "full_name", "email"])
 # Get user details from http headers
 ######################################################
 
-def get_user_profile(headers: dict = HEADERS):
+def get_user_profile(headers):
     username = None
     full_name = None
     email = None
