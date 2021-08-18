@@ -59,7 +59,7 @@ def get_user_profile(headers: dict = HEADERS):
     elif headers.get(EMAIL_FIELD, None) != None :
         email = headers.get(EMAIL_FIELD, None)
     
-    if username = None:
+    if username == None:
         username = email
 
     user =  User(username=username,
