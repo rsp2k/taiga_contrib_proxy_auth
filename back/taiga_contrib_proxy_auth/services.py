@@ -15,6 +15,8 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import logging
+import sys
 from django.db import transaction as tx
 from django.db import IntegrityError
 from django.utils.translation import ugettext as _
@@ -91,3 +93,13 @@ def proxy_login_func(request):
                           )
     data = make_auth_response_data(user)
     return data
+
+
+root = logging.getLogger()
+root.setLevel(logging.DEBUG)
+
+handler = logging.StreamHandler(sys.stdout)
+handler.setLevel(logging.DEBUG)
+formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+handler.setFormatter(formatter)
+root.addHandler(handler)
