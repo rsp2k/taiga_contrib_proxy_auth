@@ -21,7 +21,7 @@ import os
 #########################################
 ## GENERIC
 #########################################
-DEBUG = False
+DEBUG = True
 
 DATABASES = {
     'default': {

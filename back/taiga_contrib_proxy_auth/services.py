@@ -30,7 +30,7 @@ from taiga.auth.signals import user_registered as user_registered_signal
 
 from . import connector
 
-PUBLIC_REGISTER_ENABLED = getattr(settings, "PUBLIC_REGISTER_ENABLED", False)
+PUBLIC_REGISTER_ENABLED = getattr(settings, "PUBLIC_REGISTER_ENABLED", True)
 
 @tx.atomic
 def proxy_register(username:str, email:str, full_name:str, token:str=None):
@@ -83,6 +83,7 @@ def proxy_register(username:str, email:str, full_name:str, token:str=None):
 
 
 def proxy_login_func(request):
+    print "---- Inside proxy login func ----"
     user_info = connector.me(request.headers)
     user = proxy_register(username=user_info.username,
                            email=user_info.email,
