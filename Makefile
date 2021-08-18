@@ -15,12 +15,13 @@ build: build-front build-back
 build-front:
 	cd front && npm install && npm run build
 	echo $(CIRCLE_BRANCH)
-	docker build --no-cache docker/front -t robrotheram/taiga-front-openid:$(CIRCLE_TAG)  --build-arg RELEASE=$(CIRCLE_BRANCH) --build-arg TAIGA_VERSION=$(CIRCLE_TAG)
+	docker build --no-cache docker/front -t akshayfpl/fpltiaga:taiga-front-openid  --build-arg RELEASE=$(CIRCLE_BRANCH) --build-arg TAIGA_VERSION=$(CIRCLE_TAG)
 	
 build-back:
-	docker build --no-cache docker/back -t robrotheram/taiga-back-openid:$(CIRCLE_TAG)  --build-arg RELEASE=$(CIRCLE_BRANCH) --build-arg TAIGA_VERSION=$(CIRCLE_TAG)
+	docker build --no-cache docker/back -t akshayfpl/fpltiaga:taiga-back-openid  --build-arg RELEASE=$(CIRCLE_BRANCH) --build-arg TAIGA_VERSION=$(CIRCLE_TAG)
 
 publish:
-	docker push robrotheram/taiga-back-openid:$(CIRCLE_TAG)
-	docker push robrotheram/taiga-front-openid:$(CIRCLE_TAG)
-	
+	docker push fpltiaga/taiga-back-openid:$(CIRCLE_TAG)
+	docker push fpltiaga/taiga-front-openid:$(CIRCLE_TAG)
+
+

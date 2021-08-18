@@ -19,7 +19,7 @@ from django.apps import AppConfig
 
 
 class TaigaProxyAuthAppConfig(AppConfig):
-    name = "taiga_proxy_auth"
+    name = "taiga_contrib_proxy_auth"
     verbose_name = "Taiga Proxy Auth App Config"
 
     def ready(self):
