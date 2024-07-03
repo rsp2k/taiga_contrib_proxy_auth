@@ -61,25 +61,17 @@ x-environment:
   CELERY_BROKER_URL: "amqp://taiga:taiga@taiga-async-rabbitmq:5672/taiga"
   EVENTS_PUSH_BACKEND: "taiga.events.backends.rabbitmq.EventsPushBackend"
   EVENTS_PUSH_BACKEND_URL: "amqp://taiga:taiga@taiga-events-rabbitmq:5672/taiga"
-                
-
   
   # Telemetry settings
-  ENABLE_TELEMETRY: "True"
+  ENABLE_TELEMETRY: "False"
   
-  # Enable OpenID to allow to register users if they do not exist. Set to false to disable all signups
+  # Enable proxy auth to register users if they do not exist. Set to false to disable all signups
   PUBLIC_REGISTER_ENABLED: "True"
 
-  # OpenID settings
+  # proxy auth settings
   PROXY_USERNAME_FIELD = "X-PROXY-USER"
   PROXY_FULLNAME_FIELD = "X-PROXY-NAME"
   PROXY_EMAIL_FIELD = "X-PROXY-EMAIL"
-  ENABLE_OPENID: "True"
-  OPENID_USER_URL : "https://{url-to-keycloak}/auth/realms/{realm}/protocol/openid-connect/userinfo"
-  OPENID_TOKEN_URL : "https://{url-to-keycloak}/auth/realms/{realm}/protocol/openid-connect/token"
-  OPENID_CLIENT_ID : "<CLient ID>"
-  OPENID_CLIENT_SECRET : "<CLient SECRET>"
-  OPENID_SCOPE="openid email"
 
 x-volumes:
   &default-back-volumes
@@ -209,8 +201,6 @@ For Docker building for new release make sure that the following files are coppi
 **Backend:**
 Copy https://raw.githubusercontent.com/taigaio/taiga-back/master/docker/config.py
 
-
-
 ## Manual installation
 ### Taiga Backend
 
@@ -225,13 +215,12 @@ Modify `taiga-back/settings/local.py` and include the line:
 
 ```python
 INSTALLED_APPS += ["taiga_contrib_proxy_auth"]
-OPENID_USER_URL = "https://{url-to-keycloak}/auth/realms/{realm}/protocol/openid-connect/userinfo"
 
 ```
 
 # Building
 
-The make file contains the basic blocks to locally build the UI and docker containers.
+The make file contains the basic blocks to locally build the docker container.
 
 ```
 make build
