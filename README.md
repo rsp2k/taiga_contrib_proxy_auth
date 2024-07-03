@@ -1,7 +1,8 @@
-taiga-contrib-openid-auth
+taiga-contrib-proxy-auth
 =========================
-An OpenID / Keycloak Authentication Plugin. Heavily based off of
-[taiga-contrib-github-auth](https://github.com/taigaio/taiga-contrib-github-auth).
+A Proxy Authentication Plugin
+- Uses headers from reverse proxy to authenticate users
+Based on: [taiga-contrib-github-auth](https://github.com/taigaio/taiga-contrib-github-auth).
 
 Compatible with Taiga 4.2.1, 5.x, 6
 
@@ -12,40 +13,26 @@ This plugin is compatible with the offical taiga docker images 😃
 
 https://github.com/taigaio/taiga-docker
 
-This project builds 2 images based off the images provided by taiga. This should allow anyother customisations to continue to work.
+This project builds 2 images based off the images provided by taiga. This should allow other customisations to continue to work.
 
 The following will show the changes needed to the default docker-compose file to install the openid plugin.
 
 ### Config 
 The 2 images:
- - robrotheram/taiga-front-openid
- - robrotheram/taiga-back-openid
+ - taiga-front-proxy-auth
+ - taiga-back-proxy-auth
 
 Use the following environmental setting to configure the frontend conf.json and backed settings.py
 
 ```
 ENABLE_OPENID: "True"
-OPENID_URL : "https://{url-to-keycloak}/auth/realms/{realm}/protocol/openid-connect/auth"
-OPENID_USER_URL : "https://{url-to-keycloak}/auth/realms/{realm}/protocol/openid-connect/userinfo"
-OPENID_TOKEN_URL : "https://{url-to-keycloak}/auth/realms/{realm}/protocol/openid-connect/token"
-OPENID_CLIENT_ID : "<CLient ID>"
-OPENID_CLIENT_SECRET : "<CLient SECRET>"
-OPENID_NAME: "Name you want to give your openid provider e.g keycloak"
+
 ```
 
 The following are optional fields to configure the mapping between keycloak and taiga if left blank the defaults will be used
 ```
 OPENID_ID_FIELD = "sub"
-OPENID_USERNAME_FIELD = "preferred_username"
-OPENID_FULLNAME_FIELD = "name"
-OPENID_EMAIL_FIELD = "email"
-OPENID_SCOPE="openid email"
 ```
-
-Username fallback 
-The plugin will first try if the OpenID provider contains a feild set in OPENID_USERNAME_FIELD
-if it does not exist it will try in the following order: preferred_username  -> full_name -> username -> email
-you can override this by changing the intial field to check by setting OPENID_USERNAME_FIELD
 
 
 ### Docker-compose file modified from https://github.com/taigaio/taiga-docker
@@ -117,7 +104,7 @@ services:
       - taiga
 
   taiga-back:
-    image: robrotheram/taiga-back-openid
+    image: robrotheram/taiga-back-proxy-auth
     environment: *default-back-environment
     volumes: *default-back-volumes
     networks:
@@ -152,14 +139,11 @@ services:
       - taiga
 
   taiga-front:
-    image: robrotheram/taiga-front-openid
+    image: robrotheram/taiga-front-proxy-auth
     environment:
       TAIGA_URL: "http://localhost:9000"
       TAIGA_WEBSOCKETS_URL: "ws://localhost:9000"
       ENABLE_OPENID: "true"
-      OPENID_URL : "https://{url-to-keycloak}/auth/realms/{realm}/protocol/openid-connect/auth"
-      OPENID_CLIENT_ID : "<ClientID>"
-      OPENID_NAME: "Name you want to give your openid provider e.g keycloak"
     networks:
       - taiga
     # volumes:
@@ -239,7 +223,7 @@ copy the config.json and config_env_subst.sh from https://github.com/taigaio/tai
 
 Clone the repo and
 ```bash
-cd taiga-contrib-openid-auth/back
+cd taiga-contrib-proxy-auth/back
 workon taiga
 pip install -e .
 ```
@@ -247,11 +231,9 @@ pip install -e .
 Modify `taiga-back/settings/local.py` and include the line:
 
 ```python
-INSTALLED_APPS += ["taiga_contrib_openid_auth"]
+INSTALLED_APPS += ["taiga_contrib_proxy_auth"]
 OPENID_USER_URL = "https://{url-to-keycloak}/auth/realms/{realm}/protocol/openid-connect/userinfo"
-OPENID_TOKEN_URL = "https://{url-to-keycloak}/auth/realms/{realm}/protocol/openid-connect/token"
-OPENID_CLIENT_ID = "{client id}"
-OPENID_CLIENT_SECRET = "{client secret}"
+
 ```
 
 ## Taiga Frontend
@@ -260,7 +242,7 @@ Clone the repo and then link `dist` to the `taiga-front` plugins directory:
 
 ```bash
 mkdir {path-to-taiga-frontend}/plugins
-ln -s {path-to-taiga-contrib-openid-auth}/dist {path-to-taiga-frontend}/plugins/openid-auth
+ln -s {path-to-taiga-contrib-proxy-auth}/dist {path-to-taiga-frontend}/plugins/proxy-auth
 ```
 
 Add the following values to `{path-to-taiga-frontend}/conf.json`:
@@ -268,10 +250,8 @@ Add the following values to `{path-to-taiga-frontend}/conf.json`:
 ```json
 {
   "openidAuth" : "https://{url-to-keycloak}/auth/realms/{realm}/protocol/openid-connect/auth",
-  "openidName" : "{name-for-login-button}",
-  "openidClientId": "{client_id}",
   "contribPlugins": [
-      "/plugins/openid-auth/openid-auth.json"
+      "/plugins/proxy-auth/proxy-auth.json"
   ]
 }
 ```
@@ -284,11 +264,4 @@ The make file contains the basic blocks to locally build the UI and docker conta
 make build
 ```
 
-# Contributions
-My thanks to all the people who have added to the plugin
-@cristianlazarop 
-@swedishborgie
-@baloo42 
-@carneirofc
-The whole taiga team who wrote the github plugin that this plugin is based off.
 
