@@ -22,16 +22,11 @@ The 2 images:
  - taiga-front-proxy-auth
  - taiga-back-proxy-auth
 
-Use the following environmental setting to configure the frontend conf.json and backed settings.py
-
+Set the following in backed settings.py (defaults shown):
 ```
-ENABLE_OPENID: "True"
-
-```
-
-The following are optional fields to configure the mapping between keycloak and taiga if left blank the defaults will be used
-```
-OPENID_ID_FIELD = "sub"
+PROXY_USERNAME_FIELD = "X-PROXY-USER"
+PROXY_FULLNAME_FIELD = "X-PROXY-NAME"
+PROXY_EMAIL_FIELD = "X-PROXY-EMAIL"
 ```
 
 
@@ -77,6 +72,9 @@ x-environment:
   PUBLIC_REGISTER_ENABLED: "True"
 
   # OpenID settings
+  PROXY_USERNAME_FIELD = "X-PROXY-USER"
+  PROXY_FULLNAME_FIELD = "X-PROXY-NAME"
+  PROXY_EMAIL_FIELD = "X-PROXY-EMAIL"
   ENABLE_OPENID: "True"
   OPENID_USER_URL : "https://{url-to-keycloak}/auth/realms/{realm}/protocol/openid-connect/userinfo"
   OPENID_TOKEN_URL : "https://{url-to-keycloak}/auth/realms/{realm}/protocol/openid-connect/token"
@@ -139,11 +137,10 @@ services:
       - taiga
 
   taiga-front:
-    image: robrotheram/taiga-front-proxy-auth
+    image: robrotheram/taiga-front
     environment:
       TAIGA_URL: "http://localhost:9000"
       TAIGA_WEBSOCKETS_URL: "ws://localhost:9000"
-      ENABLE_OPENID: "true"
     networks:
       - taiga
     # volumes:
@@ -213,9 +210,6 @@ For Docker building for new release make sure that the following files are coppi
 **Backend:**
 Copy https://raw.githubusercontent.com/taigaio/taiga-back/master/docker/config.py
 
-**Frontend:**
-copy the config.json and config_env_subst.sh from https://github.com/taigaio/taiga-front/tree/master/docker
-
 
 
 ## Manual installation
@@ -234,26 +228,6 @@ Modify `taiga-back/settings/local.py` and include the line:
 INSTALLED_APPS += ["taiga_contrib_proxy_auth"]
 OPENID_USER_URL = "https://{url-to-keycloak}/auth/realms/{realm}/protocol/openid-connect/userinfo"
 
-```
-
-## Taiga Frontend
-
-Clone the repo and then link `dist` to the `taiga-front` plugins directory:
-
-```bash
-mkdir {path-to-taiga-frontend}/plugins
-ln -s {path-to-taiga-contrib-proxy-auth}/dist {path-to-taiga-frontend}/plugins/proxy-auth
-```
-
-Add the following values to `{path-to-taiga-frontend}/conf.json`:
-
-```json
-{
-  "openidAuth" : "https://{url-to-keycloak}/auth/realms/{realm}/protocol/openid-connect/auth",
-  "contribPlugins": [
-      "/plugins/proxy-auth/proxy-auth.json"
-  ]
-}
 ```
 
 # Building
