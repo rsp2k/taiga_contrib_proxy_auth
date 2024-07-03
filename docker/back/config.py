@@ -196,18 +196,6 @@ if ENABLE_TRELLO_IMPORTER:
         "secret_key": os.getenv('TRELLO_IMPORTER_SECRET_KEY')
     }
 
-# ENABLE_OPENID Plugin
-ENABLE_OPENID = os.getenv('ENABLE_OPENID', 'False') == 'True'
-if ENABLE_OPENID:
-    INSTALLED_APPS += [
-        "taiga_contrib_openid_auth"
-    ]
-    OPENID_USER_URL = os.getenv('OPENID_USER_URL')
-    OPENID_TOKEN_URL = os.getenv('OPENID_TOKEN_URL')
-    OPENID_CLIENT_ID = os.getenv('OPENID_CLIENT_ID')
-    OPENID_CLIENT_SECRET = os.getenv('OPENID_CLIENT_SECRET')
-    OPENID_SCOPE = os.getenv('OPENID_SCOPE')
-
 INSTALLED_APPS += ["taiga_contrib_proxy_auth"]
 PROXY_USERNAME_FIELD = os.getenv("PROXY_USERNAME_FIELD", "X-PROXY-USER")
 PROXY_FULLNAME_FIELD = os.getenv("PROXY_FULLNAME_FIELD", "X-PROXY-NAME")
