@@ -13,9 +13,9 @@ all: clean test build
 build: build-back
 
 build-back:
-	docker build --no-cache docker/back -t rsp2k/taiga-back-proxy-auth  --build-arg RELEASE=$(CIRCLE_BRANCH) --build-arg TAIGA_VERSION=$(CIRCLE_TAG)
+	docker build --no-cache docker/back -t ${image}  --build-arg RELEASE=$(CIRCLE_BRANCH) --build-arg TAIGA_VERSION=$(CIRCLE_TAG)
 
 publish:
-    docker push rsp2k/taiga-back-proxy-auth:$(CIRCLE_TAG)
+    docker push ${image}:$(CIRCLE_TAG)
 
 
