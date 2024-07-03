@@ -40,7 +40,7 @@ def proxy_register(username:str, email:str, full_name:str, token:str=None):
     Register a new user from proxy auth.
 
     This can raise `exc.IntegrityError` exceptions in
-    case of conflics found.
+    case of conflicts found.
 
     :returns: User
     """
