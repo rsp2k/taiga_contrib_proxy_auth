@@ -13,13 +13,12 @@ This plugin is compatible with the offical taiga docker images 😃
 
 https://github.com/taigaio/taiga-docker
 
-This project builds 2 images based off the images provided by taiga. This should allow other customisations to continue to work.
+This project builds 1 image based off the image provided by taiga. This should allow other customisations to continue to work.
 
-The following will show the changes needed to the default docker-compose file to install the openid plugin.
+The following will show the changes needed to the default docker-compose file to install the proxy auth plugin.
 
 ### Config 
-The 2 images:
- - taiga-front-proxy-auth
+The 1 image:
  - taiga-back-proxy-auth
 
 Set the following in backed settings.py (defaults shown):
